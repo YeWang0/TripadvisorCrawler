@@ -1,4 +1,9 @@
-beautifulsoup4
+bs4
 selenium
 pyexcel-xls
 pymongo
+requests
+Pillow
+timeout
+pyexcel-xlsxw
+pyexcel-xlsx

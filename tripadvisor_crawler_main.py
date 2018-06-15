@@ -12,7 +12,7 @@ import re
 from hotel_reviews_crawler import hotel_reviews_crawler
 from hotel_reviewer_profile_crawler import hotel_reviewer_profile_crawler, get_reviewer_profile_link
 from hotel_reviewer_scores import get_reviewer_scores
-from browserBuilder import *
+from browserBuilder.browserBuilder import *
 from os.path import getsize
 
 def json_serial(obj):
@@ -144,12 +144,14 @@ def get_hotel_tripadvisor_reviews(path):
             driver = get_webdriver()
             hotel_id=line[0]
             hotel_link=line[5]
+            print hotel_id, hotel_link
             try:
                 reviews=hotel_reviews_crawler(hotel_link,hotel_id,reviews, driver)
                 driver.close()
                 driver.quit()
-            except:
+            except Exception as e:
                 print line
+                print e
             # break
     except Exception as e:
         print e
@@ -349,7 +351,7 @@ if __name__ == '__main__':
     #     print reviewer_path.format(i)
     #     update_hotel_missed_reviewer(reviewer_path.format(i))
 
-    for i in xrange(1, 1000):
+    for i in xrange(650, 1000):
 
         start = timeit.default_timer()
         path = path_template.format(i)

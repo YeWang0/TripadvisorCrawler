@@ -11,9 +11,7 @@ import traceback
 import sys
 from hotel_review_image_crawler import img_extractor_tripadvisor
 import datetime
-from selenium import webdriver
-from timeout import timeout
-from browserBuilder import get_new_webdriver
+from browserBuilder.browserBuilder import get_new_webdriver
 
 # https://www.tripadvisor.com/Hotel_Review-g32060-d226020-Reviews-HYATT_house_Belmont_Redwood_Shores-Belmont_California.html
 # https://www.tripadvisor.com/Hotel_Review-g32060-d80974-Reviews-Holiday_Inn_Express_Suites_Belmont-Belmont_California.html
@@ -43,7 +41,7 @@ def convert_str_to_rate(string):
     except:
         pass
     return -1
-@timeout(120)
+
 def hotel_reviews_crawler(hotel_link, xls_hotel_id, reviews_lines, driver):
     reviews_imgs=dict()
     reviews_count=0
@@ -57,7 +55,7 @@ def hotel_reviews_crawler(hotel_link, xls_hotel_id, reviews_lines, driver):
     r = requests.get(hotel_link)
 
     html = r.content
-    soup = BeautifulSoup(html,'lxml')
+    soup = BeautifulSoup(html, 'html.parser')
     page_numbers=int(soup.find('div','pageNumbers').find_all('a')[-1].text)
     print page_numbers
 
@@ -75,19 +73,28 @@ def hotel_reviews_crawler(hotel_link, xls_hotel_id, reviews_lines, driver):
             with open('test.html','w') as fp:
                 fp.write(html)
                 fp.close()
-            soup = BeautifulSoup(html,'lxml')
+            soup = BeautifulSoup(html,'html.parser')
 
             reviews=soup.find_all('div','reviewSelector')
-            # print len(reviews)
-            for rv in reviews[:]:
+            print len(reviews)
+            for rv in reviews[2:]:
                 if rv['data-reviewid'] in reviews_id_set:
                     flag=False
                     print '***Find duplicates***'
                     break
                 # print rv['data-reviewid']
                 review_id=rv['data-reviewid']
-                review_link=prefix+rv.find('div','quote').find('a')['href']
-                print review_link
+                print rv.find('div','quote').find('a')
+                try:
+                    review_link = prefix + rv.find('div','quote').find('a')['href']
+                    print review_link
+                except:
+                    onclick = rv.find('div','quote').find('a')['onclick']
+                    html_start_index = onclick.index('/ShowUserReviews')
+                    html_end_index = onclick.index('.html') + 5
+                    review_link = prefix + rv.find('div','quote').find('a')['onclick'][html_start_index:html_end_index]
+                    print "Get review link from onclick: ", review_link
+
                 reviews_id_set.add(review_id)
                 reviews_count+=1
 
@@ -132,7 +139,7 @@ def hotel_reviews_crawler(hotel_link, xls_hotel_id, reviews_lines, driver):
 
                 try:
                     r2 = requests.get(review_link).content
-                    soup2 = BeautifulSoup(r2,'lxml')
+                    soup2 = BeautifulSoup(r2,'html.parser')
                     current_review=soup2.find('div','reviewSelector')
                     # print current_review
                     try:
@@ -159,7 +166,7 @@ def hotel_reviews_crawler(hotel_link, xls_hotel_id, reviews_lines, driver):
 
                         r2=driver.page_source
                         #driver.close()
-                        soup2 = BeautifulSoup(r2,'lxml')
+                        soup2 = BeautifulSoup(r2,'html.parser')
                         current_review=soup2.find('div','reviewSelector')
                         # print current_review
                         if review_date=='':
@@ -355,7 +362,7 @@ def hotel_reviews_crawler(hotel_link, xls_hotel_id, reviews_lines, driver):
 
     return reviews_lines
 
-@timeout(120)
+
 def redo_hotel_reviews_crawler(review_index,reviews_lines,driver):
     try:
         reviews_imgs=dict()
