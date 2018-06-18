@@ -6,7 +6,7 @@ import signal
 class TimeoutError(Exception):
     pass
 
-def timeout(seconds=60, error_message=os.strerror(errno.ETIME)):
+def timeout(seconds=60, error_message=os.strerror(1)):
     def decorator(func):
         def _handle_timeout(signum, frame):
             raise TimeoutError(error_message)
