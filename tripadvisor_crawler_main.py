@@ -351,7 +351,7 @@ if __name__ == '__main__':
     #     print reviewer_path.format(i)
     #     update_hotel_missed_reviewer(reviewer_path.format(i))
 
-    for i in xrange(650, 1000):
+    for i in xrange(1, 650):
 
         start = timeit.default_timer()
         path = path_template.format(i)
