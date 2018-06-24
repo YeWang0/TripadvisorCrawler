@@ -6,7 +6,36 @@ import time
 import re
 from timeout import timeout
 
-@timeout(60)
+def hotel_reviewer_name_crawler(driver, url, reviewers_id_set):
+    print url, len(reviewers_id_set)
+    driver.get(url)
+    time.sleep(1)
+    r2=driver.page_source
+
+    soup2 = BeautifulSoup(r2,'lxml')
+    try:
+        current_review=soup2.find('div','reviewSelector')
+    except:
+        return
+    try:
+        reviewer_info=current_review.find('div','member_info')
+    except:
+        return
+    # print "data:",current_review,reviewer_info
+    try:
+        screen_name=reviewer_info.find('div','info_text').find('div').text
+        print screen_name, screen_name in reviewers_id_set
+        screen_name=screen_name.replace('\n','')
+        # return
+    except:
+        return
+
+    if screen_name not in reviewers_id_set:
+        reviewers_id_set.append(screen_name)
+        return (len(reviewers_id_set), screen_name, True)
+    else:
+        return (reviewers_id_set.index(screen_name), screen_name, False)
+
 def hotel_reviewer_profile_crawler(driver,url,review_id,reviewers_id_set,reviewers_info, previous_reviewers_info):
     # go to the google home page
     # print driver
