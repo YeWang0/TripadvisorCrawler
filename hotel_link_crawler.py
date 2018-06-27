@@ -30,7 +30,7 @@ class url_crawler():
             return 'ERROR','ERROR'
 
     def google_get_search_results(self, url, content):
-        page = BeautifulSoup(content, 'lxml')
+        page = BeautifulSoup(content, 'html.parser')
         # print page
         link=''
         if page.find('div', id='ires'):

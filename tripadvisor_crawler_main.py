@@ -22,14 +22,14 @@ if __name__ == '__main__':
         # print '===get_hotel_tripadvisor_link'
         # get_hotel_tripadvisor_link(path)
         #
-        # print '===get_hotel_tripadvisor_summary'
-        # get_hotel_tripadvisor_summary(path)
+        print '===get_hotel_tripadvisor_summary'
+        get_hotel_tripadvisor_summary(path)
         #
         # print '===get_hotel_tripadvisor_reviews'
         # get_hotel_tripadvisor_reviews(path)
 
         print '===update_hotel_reviewer_name'
-        crawl_hotel_reviewer_name(path, reviewer_path)
+        # crawl_hotel_reviewer_name(path, reviewer_path)
 
         # print '===update_hotel_reviewer'
         # update_hotel_reviewer(path, reviewer_path)
@@ -43,7 +43,7 @@ if __name__ == '__main__':
         stop = timeit.default_timer()
 
         print stop - start
-        # break
+        break
 
 # Tripadvisor_Hotel_Name
 # Reviews_num

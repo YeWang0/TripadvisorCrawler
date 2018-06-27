@@ -12,7 +12,7 @@ def hotel_reviewer_name_crawler(driver, url, reviewers_id_set):
     time.sleep(1)
     r2=driver.page_source
 
-    soup2 = BeautifulSoup(r2,'lxml')
+    soup2 = BeautifulSoup(r2,'html.parser')
     try:
         current_review=soup2.find('div','reviewSelector')
     except:
@@ -44,7 +44,7 @@ def hotel_reviewer_profile_crawler(driver,url,review_id,reviewers_id_set,reviewe
     time.sleep(1)
     r2=driver.page_source
 
-    soup2 = BeautifulSoup(r2,'lxml')
+    soup2 = BeautifulSoup(r2,'html.parser')
     try:
         current_review=soup2.find('div','reviewSelector')
     except:

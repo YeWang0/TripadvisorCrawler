@@ -29,7 +29,7 @@ def img_extractor_tripadvisor(url,folder_path):
     with open('test.html','w') as fp:
         fp.write(html)
 
-    soup = BeautifulSoup(html,'lxml')
+    soup = BeautifulSoup(html,'html.parser')
 
     imgs_text=[]
     for s in soup.find_all('script'):

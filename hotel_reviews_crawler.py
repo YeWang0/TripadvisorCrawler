@@ -405,7 +405,7 @@ def redo_hotel_reviews_crawler(review_index,reviews_lines,driver):
 
         try:
             r2 = requests.get(review_link).content
-            soup2 = BeautifulSoup(r2,'lxml')
+            soup2 = BeautifulSoup(r2,'html.parser')
             current_review=soup2.find('div','reviewSelector')
 
 
@@ -420,7 +420,7 @@ def redo_hotel_reviews_crawler(review_index,reviews_lines,driver):
                 driver.get(review_link)
                 r2=driver.page_source
                 #driver.close()
-                soup2 = BeautifulSoup(r2,'lxml')
+                soup2 = BeautifulSoup(r2,'html.parser')
                 current_review=soup2.find('div','reviewSelector')
                 # print current_review
                 if review_date=='':

@@ -17,7 +17,7 @@ def get_reviewer_scores(driver,url):
 def get_reviewer_socres_helper(driver,scores):
     r2=driver.page_source
 
-    soup2 = BeautifulSoup(r2,'lxml')
+    soup2 = BeautifulSoup(r2,'html.parser')
     # reviews_summary_pre=soup2.find('div','modules-membercenter-content-stream')
     reviews_summary=soup2.find('div','cs-content-container')
     # print reviews_summary

@@ -76,7 +76,7 @@ def get_hotel_tripadvisor_summary(path):
             r = requests.get(url)
             html = r.content
             # print html
-            soup = BeautifulSoup(html,'lxml')
+            soup = BeautifulSoup(html,'html.parser')
             rank_num=soup.find('b',{'class':'rank'})
             # print rank_num.text[1:]
             #
