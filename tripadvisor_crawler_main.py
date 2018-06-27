@@ -3,7 +3,8 @@ from tripadvisor_task_handler import *
 if __name__ == '__main__':
     import timeit
     # path_template = 'data/split/Tripadvisor_new_orleans_shard_{}.xlsx'
-    path_template = "data/hotels_by_city/Dallas/Dallas_shard_{}.xlsx"
+    city = 'Los_Angeles'
+    path_template = "data/hotels_by_city/{0}/{0}_shard_{1}.xlsx"
     reviewer_path = 'data/Tripadvisor_reviewer_path_ONLY.xlsx'
     # for i in xrange(982, 2000):
     #     reviewer_path = 'data/reviewer_split/Tripadvisor_reviewer_path_shard_{}.xlsx'
@@ -13,7 +14,7 @@ if __name__ == '__main__':
     for i in xrange(1, 1000):
 
         start = timeit.default_timer()
-        path = path_template.format(i)
+        path = path_template.format(city, i)
         print "Start to crawl {} at {}...".format(path, start)
         # if getsize(path) > 7000:
         #     print getsize(path)
