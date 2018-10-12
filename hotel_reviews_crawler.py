@@ -53,14 +53,16 @@ def hotel_reviews_crawler(hotel_link, xls_hotel_id, reviews_lines, driver):
     page=0
     prefix='https://www.tripadvisor.com'
     r = requests.get(hotel_link)
-
     html = r.content
+
+    # driver.get(hotel_link)
+    # html = driver.page_source
     soup = BeautifulSoup(html, 'html.parser')
     page_numbers=int(soup.find('div','pageNumbers').find_all('a')[-1].text)
-    print page_numbers
+    print "Page count:", page_numbers
 
     while flag and page <= page_numbers:
-        print page, hotel_link
+        print 'Page: ', page, hotel_link
         url=url_generator(page, hotel_link)
         # print url
         page+=1
@@ -76,15 +78,16 @@ def hotel_reviews_crawler(hotel_link, xls_hotel_id, reviews_lines, driver):
             soup = BeautifulSoup(html,'html.parser')
 
             reviews=soup.find_all('div','reviewSelector')
-            print len(reviews)
-            for rv in reviews[2:]:
+
+            print "Num of revuews: ", len(reviews)
+            for rv in reviews[:]:
                 if rv['data-reviewid'] in reviews_id_set:
                     flag=False
                     print '***Find duplicates***'
                     break
                 # print rv['data-reviewid']
                 review_id=rv['data-reviewid']
-                print rv.find('div','quote').find('a')
+                # print rv.find('div','quote').find('a')
                 try:
                     review_link = prefix + rv.find('div','quote').find('a')['href']
                     print review_link

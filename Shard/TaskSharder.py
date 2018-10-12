@@ -79,4 +79,4 @@ class TaskSharder(object):
 ts = TaskSharder()
 # ts.shard_reviewer(100, '../data/reviewer_data/Tripadvisor_reviewer_path_ONLY.xlsx', '../data/reviewer_data/reviewer_split/Tripadvisor_reviewer_path_shard_{}.xlsx')
 
-ts.shard("../data/hotels_by_city/City/Los_Angeles_filled.xlsx", "../data/hotels_by_city/Los_Angeles/Los_Angeles_shard_{}.xlsx")
+ts.shard("../data/hotels_by_city/City/Miami_filled2.xlsx", "../data/hotels_by_city/Miami/Miami_shard_{}.xlsx")

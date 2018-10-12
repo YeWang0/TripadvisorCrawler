@@ -7,9 +7,9 @@ import re
 from timeout import timeout
 
 def hotel_reviewer_name_crawler(driver, url, reviewers_id_set):
-    print url, len(reviewers_id_set)
+    print url#, len(reviewers_id_set)
     driver.get(url)
-    time.sleep(1)
+    # time.sleep(1)
     r2=driver.page_source
 
     soup2 = BeautifulSoup(r2,'html.parser')
@@ -24,9 +24,10 @@ def hotel_reviewer_name_crawler(driver, url, reviewers_id_set):
     # print "data:",current_review,reviewer_info
     try:
         screen_name=reviewer_info.find('div','info_text').find('div').text
-        print screen_name, screen_name in reviewers_id_set
+        # print screen_name, screen_name in reviewers_id_set
         screen_name=screen_name.replace('\n','')
-        # return
+        return (-1, screen_name, True)
+
     except:
         return
 

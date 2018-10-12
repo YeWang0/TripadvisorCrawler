@@ -96,7 +96,8 @@ def get_hotel_tripadvisor_summary(path):
 
             # reviews_count=reviews_count.find('span',{'property':'v:count'})
             # print reviews_count
-            reviews_count=soup.find('span',{'class':'reviewCount'})
+            reviews_count\
+                =soup.find('span',{'class':'reviewCount'})
             print reviews_count
             try:
                 reviews_num= re.search(r'([\d]+) reviews',reviews_count.text.replace(',','')).group(1)
@@ -131,13 +132,18 @@ def get_hotel_tripadvisor_summary(path):
     # result.update({"reviewer_info":lines3})
     save_data(path,result)
 
-def get_hotel_tripadvisor_reviews(path):
+def get_hotel_tripadvisor_reviews(path, output_path=None):
+    if not output_path:
+        output_path = path
     result = OrderedDict()
     xls = get_data(path)
     data=json.dumps(xls, default=json_serial)
     lines=json.loads(data, object_hook=json_util.object_hook)['hotel_info']
-    reviews=json.loads(data, object_hook=json_util.object_hook)['review_info']
+    reviews=json.loads(data, object_hook=json_util.object_hook)['review_info'][:1]
     # lines3=json.loads(data, object_hook=json_util.object_hook)['reviewer_info']
+
+    print lines
+
     try:
         # lines[0].append('Link')
         for line in lines[1:]:
@@ -146,6 +152,7 @@ def get_hotel_tripadvisor_reviews(path):
             hotel_link=line[5]
             print hotel_id, hotel_link
             try:
+
                 reviews=hotel_reviews_crawler(hotel_link,hotel_id,reviews, driver)
                 driver.close()
                 driver.quit()
@@ -158,7 +165,7 @@ def get_hotel_tripadvisor_reviews(path):
     result.update({"hotel_info":lines})
     result.update({"review_info":reviews})
     # result.update({"reviewer_info":lines3})
-    save_data(path,result)
+    save_data(output_path,result)
 
 def crawl_hotel_reviewer_name(path, reviewer_path):
     print path
@@ -169,12 +176,13 @@ def crawl_hotel_reviewer_name(path, reviewer_path):
     lines=json.loads(data, object_hook=json_util.object_hook)['hotel_info']
     reviews=json.loads(data, object_hook=json_util.object_hook)['review_info']
 
-    reviewer_result = OrderedDict()
-    reviewer_xls = get_data(reviewer_path)
-    reviewer_data = json.dumps(reviewer_xls, default=json_serial)
-    reviewers=json.loads(reviewer_data, object_hook=json_util.object_hook)['reviewer_info']
+    # reviewer_result = OrderedDict()
+    # reviewer_xls = get_data(reviewer_path)
+    # reviewer_data = json.dumps(reviewer_xls, default=json_serial)
+    # reviewers=json.loads(reviewer_data, object_hook=json_util.object_hook)['reviewer_info']
 
-    reviewers_id_set=[reviewer[1] for reviewer in reviewers[1:] if len(reviewer) > 1]
+    # reviewers_id_set=[reviewer[1] for reviewer in reviewers[1:] if len(reviewer) > 1]
+    reviewers_id_set=[]
     # print reviewers_id_set
     # exit(0)
 
@@ -189,9 +197,10 @@ def crawl_hotel_reviewer_name(path, reviewer_path):
             reviewer_id = reviewer_data[0]
             reviewer_name = reviewer_data[1]
             reviewer_exist = reviewer_data[2]
-            if not reviewer_id or not reviewer_name:
-                print 'Passed'
-                continue
+            print "Get reviewer: ", reviewer_name
+            # if not reviewer_id or not reviewer_name:
+            #     print 'Passed'
+            #     continue
 
             reviews[index+1][1]=reviewer_id
             reviews[index+1][2]=reviewer_name
@@ -203,9 +212,9 @@ def crawl_hotel_reviewer_name(path, reviewer_path):
                 temp.append(reviewer_name)
                 temp.append(url)
 
-                print len(reviewers)
-                reviewers.append(temp)
-                print len(reviewers)
+                # print len(reviewers)
+                # reviewers.append(temp)
+                # print len(reviewers)
 
         except Exception as e:
             print e
@@ -217,8 +226,8 @@ def crawl_hotel_reviewer_name(path, reviewer_path):
     result.update({"review_info":reviews})
     save_data(path,result)
 
-    reviewer_result.update({"reviewer_info":reviewers})
-    save_data(reviewer_path, reviewer_result)
+    # reviewer_result.update({"reviewer_info":reviewers})
+    # save_data(reviewer_path, reviewer_result)
 
 
 def update_hotel_reviewer(path, reviewer_path):
