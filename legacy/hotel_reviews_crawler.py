@@ -1,17 +1,15 @@
-from bs4 import BeautifulSoup
-import requests
-import os
-import re
-import json
-import pprint
-import StringIO
-from PIL import Image
-import time
-import traceback
-import sys
-from hotel_review_image_crawler import img_extractor_tripadvisor
 import datetime
-from browserBuilder.browserBuilder import get_new_webdriver
+import pprint
+import re
+import sys
+import traceback
+
+import requests
+from bs4 import BeautifulSoup
+
+from hotel_review_image_crawler import img_extractor_tripadvisor
+from package.browser_builder import get_new_webdriver
+
 
 # https://www.tripadvisor.com/Hotel_Review-g32060-d226020-Reviews-HYATT_house_Belmont_Redwood_Shores-Belmont_California.html
 # https://www.tripadvisor.com/Hotel_Review-g32060-d80974-Reviews-Holiday_Inn_Express_Suites_Belmont-Belmont_California.html
@@ -79,7 +77,7 @@ def hotel_reviews_crawler(hotel_link, xls_hotel_id, reviews_lines, driver):
 
             reviews=soup.find_all('div','reviewSelector')
 
-            print "Num of revuews: ", len(reviews)
+            print "Num of reviews: ", len(reviews)
             for rv in reviews[:]:
                 if rv['data-reviewid'] in reviews_id_set:
                     flag=False
